@@ -15,11 +15,12 @@ resource "aws_security_group" "devops_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Jenkins Port
   ingress {
+    description = "Jenkins Port"
     from_port   = 8080
     to_port     = 8080
     protocol    = "tcp"
+    # CHANGE THIS LINE: Allow 0.0.0.0/0 so GitHub can reach Jenkins
     cidr_blocks = ["0.0.0.0/0"]
   }
 
