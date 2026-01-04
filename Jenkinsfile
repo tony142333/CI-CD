@@ -4,13 +4,13 @@ pipeline {
     environment {
         // 1. I updated this to match your Git username.
         // If your Docker Hub user is different, change 'tony142333'
-        DOCKERHUB_USERNAME = 'tony142333'
+        DOCKERHUB_USERNAME = 'tarun142333'
 
         IMAGE_NAME = 'my-devops-app'
 
         // 2. CHECK THIS: This must match the "ID" column in Jenkins Credentials exactly.
         // Common names: 'docker-hub', 'docker-hub-credentials', 'docker-login'
-        registryCredential = 'docker-hub-credentials'
+        registryCredential = 'tarun142333'
     }
 
     stages {
