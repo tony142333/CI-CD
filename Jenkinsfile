@@ -2,15 +2,26 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
+        stage('Test Docker Access') {
             steps {
-                echo 'Building the Docker Image...'
-                // We will add real Docker commands here next
+                // 1. Verify Jenkins can see Docker
+                sh 'docker --version'
+                sh 'docker ps'
             }
         }
-        stage('Deploy') {
+
+        stage('Build Image') {
             steps {
-                echo 'Deploying to the Server...'
+                // 2. Build the actual container
+                echo 'Building the Docker Image...'
+                sh 'docker build -t my-devops-app .'
+            }
+        }
+
+        stage('Verify Build') {
+            steps {
+                // 3. List images to prove it exists
+                sh 'docker image ls'
             }
         }
     }
