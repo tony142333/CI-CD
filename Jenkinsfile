@@ -10,7 +10,7 @@ pipeline {
 
         // 2. CHECK THIS: This must match the "ID" column in Jenkins Credentials exactly.
         // Common names: 'docker-hub', 'docker-hub-credentials', 'docker-login'
-        registryCredential = 'tarun142333'
+        registryCredential = 'tony142333'
     }
 
     stages {
