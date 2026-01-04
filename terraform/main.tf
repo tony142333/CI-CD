@@ -44,7 +44,7 @@ resource "aws_security_group" "devops_sg" {
 resource "aws_instance" "devops_server" {
   ami           = "ami-0ecb62995f68bb549" # Ubuntu 22.04 LTS (us-east-1)
   instance_type = "t2.medium"             # Needed for Jenkins (t2.micro is too weak)
-  key_name      = "tarun"            # We will create this key manually in a second
+  key_name      = "vas"            # We will create this key manually in a second
   security_groups = [aws_security_group.devops_sg.name]
 
   tags = {
