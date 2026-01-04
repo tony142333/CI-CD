@@ -2,22 +2,19 @@ pipeline {
     agent any
 
     environment {
-        // 1. I updated this to match your Git username.
-        // If your Docker Hub user is different, change 'tony142333'
+        // 1. Your Docker Hub Username
         DOCKERHUB_USERNAME = 'tarun142333'
 
         IMAGE_NAME = 'my-devops-app'
 
-        // 2. CHECK THIS: This must match the "ID" column in Jenkins Credentials exactly.
-        // Common names: 'docker-hub', 'docker-hub-credentials', 'docker-login'
-        registryCredential = 'tony142333'
+        // 2. THE NEW KEY ID (Matches what we just created)
+        registryCredential = 'my-docker-key'
     }
 
     stages {
         stage('Build') {
             steps {
                 echo 'Building Docker Image...'
-                // Builds image as: tony142333/my-devops-app:latest
                 sh "docker build -t ${DOCKERHUB_USERNAME}/${IMAGE_NAME}:latest ."
             }
         }
@@ -25,8 +22,8 @@ pipeline {
         stage('Push to Docker Hub') {
             steps {
                 echo 'Uploading to Docker Hub...'
+                // Using the new key ID
                 withCredentials([usernamePassword(credentialsId: registryCredential, passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
-                    // Login and Push
                     sh "echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin"
                     sh "docker push ${DOCKERHUB_USERNAME}/${IMAGE_NAME}:latest"
                 }
