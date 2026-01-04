@@ -2,10 +2,14 @@ pipeline {
     agent any
 
     environment {
-        // REPLACE THIS with your actual Docker Hub username
-        DOCKERHUB_USERNAME = 'your-dockerhub-username'
+        // 1. I updated this to match your Git username.
+        // If your Docker Hub user is different, change 'tony142333'
+        DOCKERHUB_USERNAME = 'tony142333'
+
         IMAGE_NAME = 'my-devops-app'
-        // This must match the ID you created in Jenkins Credentials
+
+        // 2. CHECK THIS: This must match the "ID" column in Jenkins Credentials exactly.
+        // Common names: 'docker-hub', 'docker-hub-credentials', 'docker-login'
         registryCredential = 'docker-hub-credentials'
     }
 
@@ -13,7 +17,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building Docker Image...'
-                // Build with the tag: username/image:latest
+                // Builds image as: tony142333/my-devops-app:latest
                 sh "docker build -t ${DOCKERHUB_USERNAME}/${IMAGE_NAME}:latest ."
             }
         }
@@ -22,9 +26,8 @@ pipeline {
             steps {
                 echo 'Uploading to Docker Hub...'
                 withCredentials([usernamePassword(credentialsId: registryCredential, passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
-                    // 1. Log in
+                    // Login and Push
                     sh "echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin"
-                    // 2. Push
                     sh "docker push ${DOCKERHUB_USERNAME}/${IMAGE_NAME}:latest"
                 }
             }
@@ -32,7 +35,6 @@ pipeline {
 
         stage('Clean Up') {
             steps {
-                // Remove the image from the Jenkins server to save space
                 sh "docker rmi ${DOCKERHUB_USERNAME}/${IMAGE_NAME}:latest"
             }
         }
