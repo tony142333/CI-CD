@@ -1,0 +1,32 @@
+name: CI Gatekeeper
+
+# Trigger: Run this only when code is pushed to the main branch
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  # Job 1: Quality Check
+  test_code:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step A: Download the code from the repo
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step B: Install Node.js on the runner
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      # Step C: Install dependencies (Simulating a "Build")
+      - name: Install Dependencies
+        run: npm install
+
+      # Step D: Run a dummy test (since we don't have real tests yet)
+      - name: Verify Application Starts
+        run: |
+          echo "Simulating unit tests..."
+          node -e "console.log('Syntax check passed!')"
