@@ -2,12 +2,9 @@ pipeline {
     agent any
 
     environment {
-        // 1. Your Docker Hub Username
         DOCKERHUB_USERNAME = 'tarun142333'
-
         IMAGE_NAME = 'my-devops-app'
-
-        // 2. THE NEW KEY ID (Matches what we just created)
+        // Ensure this ID matches what you have in Jenkins Credentials
         registryCredential = 'my-docker-key'
     }
 
@@ -15,48 +12,27 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building Docker Image...'
-                sh "docker build -t ${DOCKERHUB_USERNAME}/${IMAGE_NAME}:latest ."
+                // CHANGED: 'sh' to 'bat'
+                bat "docker build -t ${DOCKERHUB_USERNAME}/${IMAGE_NAME}:latest ."
             }
         }
 
         stage('Push to Docker Hub') {
             steps {
                 echo 'Uploading to Docker Hub...'
-                // Using the new key ID
                 withCredentials([usernamePassword(credentialsId: registryCredential, passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
-                    sh "echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin"
-                    sh "docker push ${DOCKERHUB_USERNAME}/${IMAGE_NAME}:latest"
+                    // CHANGED: 'sh' to 'bat' and used Windows-style pipe handling
+                    bat "echo %DOCKER_PASSWORD% | docker login -u %DOCKER_USERNAME% --password-stdin"
+                    bat "docker push ${DOCKERHUB_USERNAME}/${IMAGE_NAME}:latest"
                 }
             }
         }
 
         stage('Clean Up') {
             steps {
-                sh "docker rmi ${DOCKERHUB_USERNAME}/${IMAGE_NAME}:latest"
+                // CHANGED: 'sh' to 'bat'
+                bat "docker rmi ${DOCKERHUB_USERNAME}/${IMAGE_NAME}:latest"
             }
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
